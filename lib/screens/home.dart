@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   var _isLoadingForFirstTime = true;
   String agentName = '';
   String user_id = '';
+  int previousTotal = 0;
 
   var colorsList = [0xffc6e3f7,0xffd9e3e5,0xffefc5b5,0xffeae3d2];
 
@@ -64,6 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildListView(list) {
     var total = 0;
+
     return ListView.separated(
         itemCount: list.length + 1,
         shrinkWrap: true,
@@ -74,7 +76,9 @@ class _HomePageState extends State<HomePage> {
             total = total + int.parse(list[index].amount);
           if(index == list.length) {
             return Text(
-              "Total amount : \u20B9$total.00", textAlign: TextAlign.center,
+              previousTotal != 0 ? "Previous balance : \u20B9${previousTotal}.00 \n"
+                  "Today's amount : \u20B9${_collection.getTodayTotal()}.00 \n Total amount : \u20B9${(_collection.getTodayTotal() + previousTotal).toString()}.00" :
+              "Total amount : \u20B9${_collection.getTodayTotal()}.00", textAlign: TextAlign.center,
               style: TextStyle(
                   color: Theme
                       .of(context)
@@ -144,6 +148,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    previousTotal = _collection.getPreviousTotal();
+
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
@@ -191,7 +198,7 @@ class _HomePageState extends State<HomePage> {
               child: Text("Welcome,",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 16),)
             ),*/
               Container(
-                margin: EdgeInsets.only(top: 100),
+                margin: EdgeInsets.only(top: 90),
                 child: ListTile(
                   title: Text(
                     toBeginningOfSentenceCase(agentName),
@@ -218,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.only(top: 230),
+                  margin: EdgeInsets.only(top: 213),
                   decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.only(topLeft: Radius.circular(30)),
@@ -279,7 +286,6 @@ class _HomePageState extends State<HomePage> {
                               children: <Widget>[
                                 SizedBox(height: 100,),
                                 Text("No Collections Yet!",textAlign: TextAlign.center,),
-
                               ]):
                             Flexible(
                               child: SingleChildScrollView(
@@ -293,7 +299,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Container(
-                      margin: EdgeInsets.only(top: 202, right: 25),
+                      margin: EdgeInsets.only(top: 185, right: 25),
                       child: FloatingActionButton(
                         mini: false,
                         onPressed: () {

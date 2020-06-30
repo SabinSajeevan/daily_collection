@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dailycollection/helpers/strings.dart';
 import 'package:dailycollection/models/collection_types_model.dart';
-import 'package:dailycollection/models/collections_model.dart';
 import 'package:dailycollection/models/companies_model.dart';
 import 'package:dailycollection/models/customers_model.dart';
 import 'package:dailycollection/providers/collections_provider.dart';
@@ -62,12 +61,30 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
     }
     companiesList = _company.getCompanies();
     _isLoadingForFirstTime = false;
+    if(!companiesList.isEmpty && companiesList.length == 1){
+      setCompanySelected(companiesList[0]);
+    }
     super.didChangeDependencies();
   }
 
   dispose() {
     super.dispose();
   }
+
+  void setCompanySelected(company){
+    selectedCompany = company;
+    selectedCustomer = null;
+    selectedCollectionType = null;
+    selectedCollectionSubType = null;
+
+    customersList = [];
+    collectionTypesList = [];
+    collectionSubTypesList = [];
+
+    getCustomers(selectedCompany.uuid);
+    getCollectionTypes(selectedCompany.uuid);
+  }
+
 
   List<Widget> listItems(list, type) {
     List<Widget> widgetList = new List();
@@ -90,17 +107,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
         onTap: () {
           setState(() {
             if (type == "company") {
-              selectedCompany = list[i];
-              selectedCustomer = null;
-              selectedCollectionType = null;
-              selectedCollectionSubType = null;
-
-              customersList = [];
-              collectionTypesList = [];
-              collectionSubTypesList = [];
-
-              getCustomers(selectedCompany.uuid);
-              getCollectionTypes(selectedCompany.uuid);
+              setCompanySelected(list[i]);
 
             }else if (type == "collection_type") {
               selectedCollectionType = list[i];
@@ -482,6 +489,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,

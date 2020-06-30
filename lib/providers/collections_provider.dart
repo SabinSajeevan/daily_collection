@@ -13,6 +13,8 @@ class CollectionsProvider with ChangeNotifier {
 
   bool loading = true;
   bool isNoData = false;
+  int previousTotal = 0;
+  int todayTotal = 0;
 
   Future getUsersList(key) async {
 
@@ -40,15 +42,57 @@ class CollectionsProvider with ChangeNotifier {
 
           Iterable list = json.decode(response.body)['collections'];
           setUsers(list.map((model) => Collection.fromJson(model)).toList());
+          setTodayTotal(json.decode(response.body)['total']);
+          getPreviousBalance(key);
           print(response.body);
           if(usersList.length == 0){
             setEmptyData(true);
+          }else{
+            setEmptyData(false);
           }
           setLoading(false);
         }else{
           print(response.body);
           setLoading(false);
           setEmptyData(true);
+          setMessage("error",key);
+        }
+        //print(json.decode(response.body));
+      });
+    }catch (e){
+      print(e.toString());
+      setLoading(false);
+      setEmptyData(true);
+      setMessage("Something's went wrong.",key);
+    }
+  }
+
+  Future getPreviousBalance(key) async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+
+      var token = prefs.getString("token");
+      var agent_id = prefs.getString("uuid");
+
+      Map<String, String> headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization" : "bearer $token"
+      };
+
+      var date = DateFormat('yyyy-MM-d').format(DateTime.now());
+      print(date);
+      var body = {'agent_id': agent_id,
+        'date': date};
+
+      await http.post('${Resources.appURL}previous_balance', headers: headers,body: body).then((
+          response) {
+        if(response.statusCode == 200){
+
+          setPreviousTotal(json.decode(response.body)['total']);
+        }else{
+          print(response.body);
           setMessage("error",key);
         }
         //print(json.decode(response.body));
@@ -92,6 +136,16 @@ class CollectionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setPreviousTotal(value) {
+    previousTotal = value;
+    notifyListeners();
+  }
+
+  void setTodayTotal(value) {
+    todayTotal = value;
+    notifyListeners();
+  }
+
   List<Collection> getUsers() {
     return usersList;
   }
@@ -100,6 +154,14 @@ class CollectionsProvider with ChangeNotifier {
     print(getUsers());
    // usersList[index].name = "sabzzz";
     notifyListeners();
+  }
+
+  int getPreviousTotal(){
+   return previousTotal;
+  }
+
+  int getTodayTotal(){
+    return todayTotal;
   }
 
   void setMessage(msg,key){

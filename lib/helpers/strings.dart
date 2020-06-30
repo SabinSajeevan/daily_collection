@@ -7,5 +7,5 @@ class Resources{
   static const Color colorDark = Color(0XFF3d3d47);
 
   static const String appURL = "http://192.168.43.25:8000/api/";
-//static const String appURL = "http://sonnetmobiles.starpixmedia.com/api/";
+//static const String appURL = "http://dailycollections.abcorthopedics.com/api/";
 }
