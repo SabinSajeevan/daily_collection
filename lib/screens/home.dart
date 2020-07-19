@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();
-
+  //HomePage
   CollectionsProvider _collection;
   var _isLoadingForFirstTime = true;
   String agentName = '';
@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildListView(list) {
-    var total = 0;
 
     return ListView.separated(
         itemCount: list.length + 1,
@@ -72,18 +71,44 @@ class _HomePageState extends State<HomePage> {
         reverse: true,
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          if(index != list.length)
-            total = total + int.parse(list[index].amount);
           if(index == list.length) {
-            return Text(
-              previousTotal != 0 ? "Previous balance : \u20B9${previousTotal}.00 \n"
-                  "Today's amount : \u20B9${_collection.getTodayTotal()}.00 \n Total amount : \u20B9${(_collection.getTodayTotal() + previousTotal).toString()}.00" :
-              "Total amount : \u20B9${_collection.getTodayTotal()}.00", textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Theme
-                      .of(context)
-                      .primaryColor, fontWeight: FontWeight.w500, fontSize: 16
-              ),);
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]),
+                borderRadius: BorderRadius.circular(5)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("Prev : \u20B9${previousTotal}.00",
+                        style: TextStyle(
+                            color: Theme
+                                .of(context)
+                                .primaryColor, fontWeight: FontWeight.w500, fontSize: 15
+                        ),),
+                      Text("Today : \u20B9${_collection.getTodayTotal()}.00",
+                        style: TextStyle(
+                            color: Theme
+                                .of(context)
+                                .primaryColor, fontWeight: FontWeight.w500, fontSize: 15
+                        ),),
+                    ],
+                  ),
+                  SizedBox(height: 4,),
+                  Text("Total : \u20B9${(_collection.getTodayTotal() + previousTotal).toString()}.00",
+                    style: TextStyle(
+                        color: Theme
+                            .of(context)
+                            .primaryColor, fontWeight: FontWeight.w500, fontSize: 16
+                    ),)
+                ],
+              ),
+            );
           }else {
             if (filter == null || filter == "") {
               return _buildRow(list[index],index);
