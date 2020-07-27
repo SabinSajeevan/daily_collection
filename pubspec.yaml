@@ -32,6 +32,9 @@ dependencies:
   provider:
   shared_preferences:
   intl:
+  sqflite:
+  path_provider:
+  draggable_scrollbar:
 
 dev_dependencies:
   flutter_test:

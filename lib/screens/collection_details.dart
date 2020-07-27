@@ -1,15 +1,10 @@
 import 'dart:convert';
 
 import 'package:dailycollection/helpers/strings.dart';
-import 'package:dailycollection/models/collection_types_model.dart';
 import 'package:dailycollection/models/collections_model.dart';
-import 'package:dailycollection/models/companies_model.dart';
-import 'package:dailycollection/models/customers_model.dart';
 import 'package:dailycollection/providers/collections_provider.dart';
-import 'package:dailycollection/providers/companies_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -125,7 +120,13 @@ class _CollectionDetailsPageState extends State<CollectionDetailsPage> {
             children: <Widget>[
               Container(
                 height: 300,
-                color: Theme.of(context).primaryColor,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).primaryColorDark
+                  ],
+                )),
                 width: MediaQuery.of(context).size.width,
               ),
               Container(
@@ -141,9 +142,11 @@ class _CollectionDetailsPageState extends State<CollectionDetailsPage> {
                     Text(
                       "Collection Details",
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor),
+                          color: Theme
+                              .of(context)
+                              .primaryColorDark),
                       textAlign: TextAlign.center,
                     ),
                     Divider(),
@@ -171,8 +174,11 @@ class _CollectionDetailsPageState extends State<CollectionDetailsPage> {
                                               toBeginningOfSentenceCase(widget.collection.customer_name),
                                             ),
                                             subtitle: Text(
-                                              "\u20B9${widget.collection.amount}.00",
-                                              style: TextStyle(color: Theme.of(context).primaryColor),
+                                              "${widget.collection.amount}.00",
+                                              style: TextStyle(color: Theme
+                                                  .of(context)
+                                                  .accentColor,
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                             leading: Container(
                                                 width: 50,
@@ -184,7 +190,6 @@ class _CollectionDetailsPageState extends State<CollectionDetailsPage> {
                                                   widget.collection.customer_name.substring(0,1).toUpperCase(),style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 27),
                                                 )
                                             ),
-                                            trailing: Text(DateFormat.jm().format(DateTime.parse(widget.collection.created_at)),),
                                           ),
                                           Divider(),
                                           ListTile(

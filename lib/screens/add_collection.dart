@@ -6,6 +6,7 @@ import 'package:dailycollection/models/companies_model.dart';
 import 'package:dailycollection/models/customers_model.dart';
 import 'package:dailycollection/providers/collections_provider.dart';
 import 'package:dailycollection/providers/companies_provider.dart';
+import 'package:dailycollection/screens/select_customer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,7 +82,6 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
     collectionTypesList = [];
     collectionSubTypesList = [];
 
-    getCustomers(selectedCompany.uuid);
     getCollectionTypes(selectedCompany.uuid);
   }
 
@@ -383,6 +383,11 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
             Iterable list = json.decode(response.body)['collection_types'];
             collectionTypesList =
                 list.map((model) => CollectionType.fromJson(model)).toList();
+            if (collectionTypesList.length == 1) {
+              selectedCollectionType = collectionTypesList[0];
+              selectedCollectionSubType = null;
+              getSubTypes(selectedCollectionType.sub_type);
+            }
           });
         } else {
           _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -403,9 +408,14 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
     collectionSubTypesList = [];
     if(sub_type != null){
       var split = sub_type.split(",");
-      for(var i=0;i<split.length;i++){
+      for (var i = 0; i < split.length; i++) {
         setState(() {
           collectionSubTypesList.add(split[i]);
+        });
+      }
+      if (collectionSubTypesList.length == 1) {
+        setState(() {
+          selectedCollectionSubType = collectionSubTypesList[0];
         });
       }
     }
@@ -455,8 +465,10 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
           if(response.statusCode == 200){
             setState(() {
               selectedCustomer = null;
-              selectedCollectionType = null;
-              selectedCollectionSubType = null;
+              if (collectionTypesList.length != 1)
+                selectedCollectionType = null;
+              if (collectionSubTypesList.length != 1)
+                selectedCollectionSubType = null;
               amountController.text = '';
             });
             _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -478,7 +490,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
           content: Text(e.toString()),
         ));
       }
-    }else{
+    } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text("Please fill all mandatory fields."),
       ));
@@ -487,9 +499,25 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
     return isLogin;
   }
 
+  void navigateToSelectCustomer() {
+    if (selectedCompany != null) {
+      var result = Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SelectCustomerPage(
+                    company_id: selectedCompany.uuid,
+                  ))).then((value) {
+        if (value != null) {
+          setState(() {
+            selectedCustomer = value;
+          });
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
@@ -503,8 +531,22 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
             children: <Widget>[
               Container(
                 height: 300,
-                color: Theme.of(context).primaryColor,
-                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme
+                            .of(context)
+                            .primaryColor,
+                        Theme
+                            .of(context)
+                            .primaryColorDark
+                      ],
+                    )
+                ),
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
               ),
               Container(
                   margin: EdgeInsets.only(top: 100),
@@ -519,9 +561,11 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                     Text(
                       "Add Collection",
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor),
+                          color: Theme
+                              .of(context)
+                              .primaryColorDark),
                       textAlign: TextAlign.center,
                     ),
                     Divider(),
@@ -612,17 +656,18 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                                       color: Colors.transparent,
                                       child: InkWell(
                                           onTap: () {
-                                            _showDialog("Select Customer",
-                                                customersList, "customer");
+                                            /*_showDialog("Select Customer",
+                                                customersList, "customer");*/
+                                            navigateToSelectCustomer();
                                           },
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                          BorderRadius.circular(8),
                                           child: Padding(
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 10, vertical: 10),
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
+                                              CrossAxisAlignment.stretch,
                                               children: <Widget>[
                                                 SizedBox(
                                                   height: 5,
@@ -828,11 +873,13 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                                 height: 25,
                               ),
                               RaisedButton(
-                                color: Theme.of(context).accentColor,
+                                color: Theme
+                                    .of(context)
+                                    .accentColor,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 80),
+                                    vertical: 10, horizontal: 60),
                                 onPressed: () {
                                   showProgress();
                                 },

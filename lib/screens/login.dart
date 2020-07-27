@@ -99,16 +99,17 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Image.asset(
-                        "images/logo.jpg", width: 100, fit: BoxFit.cover,),
-                      Text("Welcome", style: TextStyle(fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff234E6B))),
-                      Text("Log in to Continue", style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: Colors.grey,
-                          fontSize: 15),),
-                    ],
+                  Image.asset(
+                    "images/edacs_logo.png",
+                    width: 130,
+                    fit: BoxFit.cover,
+                  ),
+                  Image.asset(
+                    "images/appname.png",
+                    width: 130,
+                    fit: BoxFit.cover,
+                  ),
+                ],
                   ),
                   ),
                   SizedBox(height: 80,),
@@ -122,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(8),
                         color: Colors.grey[200]
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -131,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           controller: _userIDController,
                           textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (term){
+                          onFieldSubmitted: (term) {
                             FocusScope.of(context).nextFocus();
                           },
                           decoration: InputDecoration(
@@ -153,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(8),
                         color: Colors.grey[200]
                     ),
-                    padding: EdgeInsets.only(top: 5,bottom: 5,left: 10),
+                    padding: EdgeInsets.only(top: 5, bottom: 0, left: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -207,10 +208,20 @@ class _LoginPageState extends State<LoginPage> {
               ),
         ),
       bottomNavigationBar: Container(
-        margin: EdgeInsets.only(right: 20),
+        margin: EdgeInsets.only(right: 40),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(30),bottomRight: Radius.circular(4)),
-          color: Color(0xff234E6B),
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30), bottomRight: Radius.circular(4)),
+            gradient: LinearGradient(
+              colors: [
+                Theme
+                    .of(context)
+                    .primaryColor,
+                Theme
+                    .of(context)
+                    .accentColor
+              ],
+            )
         ),
         child: Material(
           color: Colors.transparent,
@@ -221,12 +232,14 @@ class _LoginPageState extends State<LoginPage> {
                 //Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
               },
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("LOGIN", style: TextStyle(
-                          fontSize: 20, color: Colors.white,fontWeight: FontWeight.w500)),
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500)),
                       Image.asset("images/signin.png", width: 35,
                         height: 35,
                         fit: BoxFit.cover,)

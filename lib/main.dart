@@ -20,12 +20,12 @@ Future<void> main() async {
           child: MaterialApp(
               title: 'Daily Collections',
               theme: ThemeData(
-                primaryColor: Color(0xff234E6B),
-                primaryColorDark: Color(0XFF3d3d47),
-                primaryColorLight: Colors.black26,
-                accentColor: Color(0xff23616b),
-                fontFamily: "Poppins",
-              ),
+            primaryColor: Color(0xff7a2662),
+            primaryColorDark: Color(0xff3d096d),
+            primaryColorLight: Colors.black26,
+            accentColor: Color(0xff234E6B),
+            fontFamily: "Poppins",
+          ),
               home: isLogged ? HomePage() : LoginPage()
           )
       )
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'EDaCS',
       theme: ThemeData(
         // This is the theme of your application.
         //
