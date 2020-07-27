@@ -190,7 +190,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
           return _buildRow(list[index], index);
         } else {
           if (list[index].name.toLowerCase().contains(filter.toLowerCase()) ||
-              list[index].created_at.contains(filter)) {
+              list[index].code.contains(filter)) {
             return _buildRow(list[index], index);
           } else {
             return new Container();

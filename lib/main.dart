@@ -18,16 +18,15 @@ Future<void> main() async {
             ChangeNotifierProvider(create: (_) => CompaniesProvider()),
           ],
           child: MaterialApp(
-              title: 'Daily Collections',
-              theme: ThemeData(
+              title: 'EDaCS',
+          theme: ThemeData(
             primaryColor: Color(0xff7a2662),
             primaryColorDark: Color(0xff3d096d),
             primaryColorLight: Colors.black26,
             accentColor: Color(0xff234E6B),
             fontFamily: "Poppins",
           ),
-              home: isLogged ? HomePage() : LoginPage()
-          )
+          home: isLogged ? HomePage() : LoginPage())
       )
       );
 }
