@@ -333,7 +333,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
 
       Map<String, String> headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": "bearer $token"
+        "Authorization": "Bearer $token"
       };
       var body = {'company_id': company_id};
 
@@ -370,7 +370,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
 
       Map<String, String> headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": "bearer $token"
+        "Authorization": "Bearer $token"
       };
       var body = {'company_id': company_id};
 
@@ -447,7 +447,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
 
         Map<String, String> headers = {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": "bearer $token"
+          "Authorization": "Bearer $token"
         };
 
         var body = {
@@ -486,9 +486,15 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
         });
       }catch (e){
         print(e);
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text(e.toString()),
-        ));
+        if (e.toString().contains("SocketException")) {
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text("Network error,Please try again later."),
+          ));
+        } else {
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text(e.toString()),
+          ));
+        }
       }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(

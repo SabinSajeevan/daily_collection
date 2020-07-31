@@ -1,14 +1,17 @@
 import 'package:dailycollection/helpers/database_helper.dart';
+import 'package:dailycollection/helpers/strings.dart';
 import 'package:dailycollection/models/collections_model.dart';
 import 'package:dailycollection/providers/collections_provider.dart';
 import 'package:dailycollection/screens/add_collection.dart';
 import 'package:dailycollection/screens/collection_details.dart';
 import 'package:dailycollection/screens/login.dart';
+import 'package:device_id/device_id.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   @override
@@ -142,23 +145,80 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
               shape: BoxShape.circle, color: Color(colorsList[index > 3 ? index % 4 : index])),
           child: Text(
-            c.customer_name.substring(0,1).toUpperCase(),style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 27),
-          )
+            c.customer_name.substring(0, 1).toUpperCase(),
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 27),
+          )),
+      trailing: Text(
+        DateFormat.jm().format(DateTime.parse(c.created_at)),
       ),
-      trailing: Text(DateFormat.jm().format(DateTime.parse(c.created_at)),),
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CollectionDetailsPage(collection: c,color: Color(colorsList[index > 3 ? index % 4 : index]),)));
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CollectionDetailsPage(
+                      collection: c,
+                      color: Color(colorsList[index > 3 ? index % 4 : index]),
+                    )));
       },
     );
   }
 
-  Future<void> logOut() async {
+  Future<void> showProgress() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: CupertinoActivityIndicator(radius: 20),
+          );
+        });
+    bool result = await logOut();
+    Navigator.pop(context);
+    if (result) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      DatabaseHelper helper = DatabaseHelper.instance;
+      helper.deleteAllFromTable();
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
+  }
+
+  Future<bool> logOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    DatabaseHelper helper = DatabaseHelper.instance;
-    helper.deleteAllFromTable();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+    bool res = false;
+    try {
+      var token = prefs.getString("token");
+
+      Map<String, String> headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": "Bearer $token"
+      };
+      String deviceid = await DeviceId.getID;
+
+      var body = {'device_id': deviceid};
+      await http
+          .post('${Resources.appURL}delete_token', body: body, headers: headers)
+          .then((response) {
+        print(response.body);
+        if (response.statusCode == 200) {
+          res = true;
+        }
+      });
+    } catch (e) {
+      print(e);
+      if (e.toString().contains("SocketException")) {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text("Network error,Please try again later."),
+        ));
+      } else {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text(e.toString()),
+        ));
+      }
+    }
+    return res;
   }
 
   @override
@@ -202,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         MaterialButton(
                           onPressed: () {
-                            logOut();
+                            showProgress();
                           },
                           child: Row(
                             children: <Widget>[

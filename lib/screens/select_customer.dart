@@ -62,7 +62,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
 
         Map<String, String> headers = {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": "bearer $token"
+          "Authorization": "Bearer $token"
         };
         var body = {'company_id': widget.company_id};
 
@@ -120,7 +120,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
 
       Map<String, String> headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": "bearer $token"
+        "Authorization": "Bearer $token"
       };
       var body = {'company_id': company_id};
 

@@ -24,7 +24,7 @@ class CompaniesProvider with ChangeNotifier {
 
       Map<String, String> headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization" : "bearer $token"
+        "Authorization": "Bearer $token"
       };
 
       var body = {'uuid': uuid};
@@ -32,9 +32,10 @@ class CompaniesProvider with ChangeNotifier {
       await http.post('${Resources.appURL}company_ids', headers: headers,body: body).then((
           response) {
         if(response.statusCode == 200){
-          List ids = json.decode(json.decode(response.body)['company_ids'][0]['company_ids']);
-          getDetails(ids.join(","),headers,key);
-
+          print(response.body);
+          List ids = json.decode(
+              json.decode(response.body)['company_ids'][0]['company_ids']);
+          getDetails(ids.join(","), headers, key);
         }else{
           print(response.body);
           setLoading(false);
@@ -60,8 +61,10 @@ class CompaniesProvider with ChangeNotifier {
       if(response.statusCode == 200){
         Iterable list = json.decode(response.body)['company'];
         setCompanies(list.map((model) => Company.fromJson(model)).toList());
-        if(companiesList.length == 0){
+        if (companiesList.length == 0) {
           setEmptyData(true);
+        } else {
+          setEmptyData(false);
         }
         setLoading(false);
       }else{

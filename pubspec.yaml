@@ -35,6 +35,7 @@ dependencies:
   sqflite:
   path_provider:
   draggable_scrollbar:
+  device_id:
 
 dev_dependencies:
   flutter_test:

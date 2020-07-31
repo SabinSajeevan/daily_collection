@@ -77,8 +77,8 @@ class _CollectionDetailsPageState extends State<CollectionDetailsPage> {
 
         Map<String, String> headers = {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": "bearer $token"
-        };
+          "Authorization": "Bearer $token"
+      };
 
         var body = {
           'uuid': widget.collection.uuid

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dailycollection/helpers/strings.dart';
 import 'package:dailycollection/screens/home.dart';
+import 'package:device_id/device_id.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,12 @@ class _LoginPageState extends State<LoginPage> {
     var isLogin = false;
 
     if (_formKey.currentState.validate()) {
-      var body = {'user_id': _userIDController.text.trim(), 'password': _passwordController.text.trim() };
+      String deviceid = await DeviceId.getID;
+      var body = {
+        'user_id': _userIDController.text.trim(),
+        'password': _passwordController.text.trim(),
+        'device_id': deviceid
+      };
       //String jsonBody = json.encode(body);
 
       //php -S 192.168.43.125:8000 -t public
@@ -51,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
       //php artisan make:migration create_users_table --create=users
 
       try {
-
         Map<String, String> headers = {
           "Content-Type": "application/x-www-form-urlencoded",
         };
@@ -75,9 +80,15 @@ class _LoginPageState extends State<LoginPage> {
         });
       }catch (e){
         print(e);
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text(e.toString()),
-        ));
+        if (e.toString().contains("SocketException")) {
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text("Network error,Please try again later."),
+          ));
+        } else {
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text(e.toString()),
+          ));
+        }
       }
     }
 

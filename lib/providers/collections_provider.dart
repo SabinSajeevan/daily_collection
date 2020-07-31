@@ -27,7 +27,7 @@ class CollectionsProvider with ChangeNotifier {
 
       Map<String, String> headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization" : "bearer $token"
+        "Authorization": "Bearer $token"
       };
 
       var date = DateFormat('yyyy-MM-d').format(DateTime.now());
@@ -78,7 +78,7 @@ class CollectionsProvider with ChangeNotifier {
 
       Map<String, String> headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization" : "bearer $token"
+        "Authorization": "Bearer $token"
       };
 
       var date = DateFormat('yyyy-MM-d').format(DateTime.now());
