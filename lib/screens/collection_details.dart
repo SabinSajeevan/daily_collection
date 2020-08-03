@@ -142,11 +142,9 @@ class _CollectionDetailsPageState extends State<CollectionDetailsPage> {
                     Text(
                       "Collection Details",
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Theme
-                              .of(context)
-                              .primaryColorDark),
+                          fontSize: 19,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).primaryColorDark),
                       textAlign: TextAlign.center,
                     ),
                     Divider(),

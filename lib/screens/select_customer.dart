@@ -307,8 +307,8 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
                   Text(
                     "Select Customer",
                     style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w700,
                         color: Theme.of(context).primaryColorDark),
                     textAlign: TextAlign.center,
                   ),
