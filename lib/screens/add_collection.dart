@@ -112,6 +112,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
           setState(() {
             if (type == "company") {
               setCompanySelected(list[i]);
+              selectedCustomer = null;
             } else if (type == "collection_type") {
               selectedCollectionType = list[i];
               selectedCollectionSubType = null;
