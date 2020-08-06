@@ -290,7 +290,6 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
 
       try {
         var token = prefs.getString("token");
-        var agent_id = prefs.getString("uuid");
 
         Map<String, String> headers = {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -299,7 +298,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
 
         var body = {
           'company_id': selectedCompany.uuid,
-          'agent_id': agent_id,
+          'agent_id': selectedCompany.agent_id,
           'customer_id': selectedCustomer.customer_id,
           'collection_type': selectedCollectionType.uuid,
           'sub_type': selectedCollectionSubType == null
@@ -413,53 +412,28 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                       color: Colors.white),
                   child: Column(children: <Widget>[
                     SizedBox(
-                      height: 3,
+                      height: 15,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        SizedBox(width: 50,),
-                        Expanded(
-                          child: Text(
-                            "Add Collection",
-                            style: TextStyle(
-                              fontSize: 19,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColorDark,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            showProgress();
-                          },
-                          child: Text("Save", style: TextStyle(
-                              color: Theme
-                                  .of(context)
-                                  .accentColor,
-                              fontWeight: FontWeight.w700
-                          ),),
-                        )
-                      ],
+                    Text(
+                      "Add Collection",
+                      style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).primaryColorDark),
+                      textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 5,),
-                    Divider(
-                      height: 1,
-                    ),
+                    Divider(),
                     _company.isLoading()
                         ? Container(
-                      margin: EdgeInsets.only(top: 100),
-                      alignment: Alignment.center,
-                      child: CupertinoActivityIndicator(radius: 20),
-                    )
+                            margin: EdgeInsets.only(top: 100),
+                            alignment: Alignment.center,
+                            child: CupertinoActivityIndicator(radius: 20),
+                          )
                         : _company.isEmpty()
-                        ? ListView(shrinkWrap: true, children: <Widget>[
-                      SizedBox(
-                        height: 100,
-                      ),
+                            ? ListView(shrinkWrap: true, children: <Widget>[
+                                SizedBox(
+                                  height: 100,
+                                ),
                       Text(
                         "No Companies Yet!",
                         textAlign: TextAlign.center,
@@ -760,58 +734,90 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                               SizedBox(
                                 height: 12,
                               ),
-                              Container(
-                                margin:
-                                EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(8),
-                                    color: Colors.grey[200]),
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 5, left: 10),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text("AMOUNT*"),
-                                    Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: TextField(
-                                            controller: amountController,
-                                            onTap: () {
-                                              setState(() {
-                                                count = 1;
-                                              });
-                                            },
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              focusedBorder:
-                                              InputBorder.none,
-                                              enabledBorder:
-                                              InputBorder.none,
-                                              errorBorder:
-                                              InputBorder.none,
-                                              disabledBorder:
-                                              InputBorder.none,
-                                              hintText: "Enter amount",
-                                            ),
-                                            keyboardType:
-                                            TextInputType.number,
-                                            inputFormatters: <
-                                                TextInputFormatter>[
-                                              WhitelistingTextInputFormatter
-                                                  .digitsOnly
-                                            ],
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      margin:
+                                      EdgeInsets.symmetric(horizontal: 20),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(8),
+                                          color: Colors.grey[200]),
+                                      padding: EdgeInsets.only(
+                                          top: 5, bottom: 5, left: 10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 5,
                                           ),
+                                          Text("AMOUNT*"),
+                                          Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: TextField(
+                                                  controller: amountController,
+                                                  onTap: () {
+                                                    setState(() {
+                                                      count = 1;
+                                                    });
+                                                  },
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                    focusedBorder:
+                                                    InputBorder.none,
+                                                    enabledBorder:
+                                                    InputBorder.none,
+                                                    errorBorder:
+                                                    InputBorder.none,
+                                                    disabledBorder:
+                                                    InputBorder.none,
+                                                    hintText: "Enter amount",
+                                                  ),
+                                                  keyboardType:
+                                                  TextInputType.number,
+                                                  inputFormatters: <
+                                                      TextInputFormatter>[
+                                                    WhitelistingTextInputFormatter
+                                                        .digitsOnly
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(right: 20),
+                                    decoration: BoxDecoration(
+                                        color: Theme
+                                            .of(context)
+                                            .accentColor,
+                                        borderRadius: BorderRadius.circular(8)
+                                    ),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(8),
+                                        onTap: () {
+                                          showProgress();
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20, horizontal: 40),
+                                          child: Text("SAVE", style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),),
                                         ),
-                                      ],
-                                    )
-                                  ],
-                                ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                               SizedBox(
                                 height: 20,

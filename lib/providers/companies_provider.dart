@@ -13,61 +13,32 @@ class CompaniesProvider with ChangeNotifier {
   bool loading = true;
   bool isNoData = false;
 
-  Future getCompaniesList(key) async {
-
+  Future<void> getCompaniesList(key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("token");
+    var phone = prefs.getString("phone");
 
+    Map<String, String> headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": "Bearer $token"
+    };
+
+    var body = {'phone': phone};
     try {
-
-      var token = prefs.getString("token");
-      var uuid = prefs.getString("uuid");
-
-      Map<String, String> headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": "Bearer $token"
-      };
-
-      var body = {'uuid': uuid};
-
-      await http.post('${Resources.appURL}company_ids', headers: headers,body: body).then((
-          response) {
-        if(response.statusCode == 200){
+      await http
+          .post('${Resources.appURL}companies', headers: headers, body: body)
+          .then((response) {
+        if (response.statusCode == 200) {
           print(response.body);
-          List ids = json.decode(
-              json.decode(response.body)['company_ids'][0]['company_ids']);
-          getDetails(ids.join(","), headers, key);
-        }else{
-          print(response.body);
+          Iterable list = json.decode(response.body)['company'];
+          setCompanies(list.map((model) => Company.fromJson(model)).toList());
+          if (companiesList.length == 0) {
+            setEmptyData(true);
+          } else {
+            setEmptyData(false);
+          }
           setLoading(false);
-          setEmptyData(true);
-          setMessage("error",key);
-        }
-        //print(json.decode(response.body));
-      });
-
-    }catch (e){
-      print(e.toString());
-      setLoading(false);
-      setEmptyData(true);
-      setMessage("Something's went wrong.",key);
-    }
-  }
-
-  Future<void> getDetails(comapany_ids,headers,key) async {
-    var body = {'company_ids': comapany_ids};
-    try {
-    await http.post('${Resources.appURL}companies', headers: headers,body: body).then((
-        response) {
-      if(response.statusCode == 200){
-        Iterable list = json.decode(response.body)['company'];
-        setCompanies(list.map((model) => Company.fromJson(model)).toList());
-        if (companiesList.length == 0) {
-          setEmptyData(true);
-        } else {
-          setEmptyData(false);
-        }
-        setLoading(false);
-      }else{
+        }else{
         print(response.body);
         setLoading(false);
         setEmptyData(true);
@@ -87,8 +58,6 @@ class CompaniesProvider with ChangeNotifier {
     companiesList = list;
     notifyListeners();
   }
-
-
 
   void setLoading(value) {
     loading = value;

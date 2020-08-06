@@ -2,6 +2,7 @@ import 'package:dailycollection/helpers/database_helper.dart';
 import 'package:dailycollection/helpers/strings.dart';
 import 'package:dailycollection/models/collections_model.dart';
 import 'package:dailycollection/providers/collections_provider.dart';
+import 'package:dailycollection/providers/companies_provider.dart';
 import 'package:dailycollection/screens/add_collection.dart';
 import 'package:dailycollection/screens/collection_details.dart';
 import 'package:dailycollection/screens/login.dart';
@@ -21,16 +22,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-  new GlobalKey<RefreshIndicatorState>();
+      new GlobalKey<RefreshIndicatorState>();
 
   //HomePage
   CollectionsProvider _collection;
+  CompaniesProvider _company;
+
   var _isLoadingForFirstTime = true;
   String agentName = '';
   String user_id = '';
   int previousTotal = 0;
 
-  var colorsList = [0xffc6e3f7,0xffd9e3e5,0xffefc5b5,0xffeae3d2];
+  var colorsList = [0xffc6e3f7, 0xffd9e3e5, 0xffefc5b5, 0xffeae3d2];
 
   TextEditingController controller = new TextEditingController();
   String filter;
@@ -57,8 +60,9 @@ class _HomePageState extends State<HomePage> {
   void didChangeDependencies() {
     if (_isLoadingForFirstTime) {
       _collection = Provider.of<CollectionsProvider>(context);
-      _collection.getUsersList(_scaffoldKey);
+      _collection.getAgentID(_scaffoldKey);
     }
+
     _isLoadingForFirstTime = false;
     super.didChangeDependencies();
   }
@@ -132,18 +136,28 @@ class _HomePageState extends State<HomePage> {
       title: Text(
         toBeginningOfSentenceCase(c.customer_name),
       ),
-      subtitle: Text(
-        "${c.amount}.00",
-        style: TextStyle(color: Theme
-            .of(context)
-            .accentColor, fontWeight: FontWeight.w500),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            "${c.amount}.00",
+            style: TextStyle(color: Theme
+                .of(context)
+                .accentColor, fontWeight: FontWeight.w500),
+          ),
+          Text(
+            "${c.company_name} | ${c.collection_number}",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ],
       ),
       leading: Container(
           width: 50,
           height: 50,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              shape: BoxShape.circle, color: Color(colorsList[index > 3 ? index % 4 : index])),
+              shape: BoxShape.circle,
+              color: Color(colorsList[index > 3 ? index % 4 : index])),
           child: Text(
             c.customer_name.substring(0, 1).toUpperCase(),
             style: TextStyle(
@@ -180,6 +194,8 @@ class _HomePageState extends State<HomePage> {
       prefs.clear();
       DatabaseHelper helper = DatabaseHelper.instance;
       helper.deleteAllFromTable();
+      _collection.setPreviousTotal(0);
+      _collection.setTodayTotal(0);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
     }
@@ -309,6 +325,15 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                  ),
+                  Container(
+                    alignment: Alignment.topRight,
+                    margin: EdgeInsets.only(top: 155, right: 90),
+                    child: Text(' 2.7.1 © TechnoSoft', style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.end,),
                   ),
                   Container(
                       margin: EdgeInsets.only(top: 180),

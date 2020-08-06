@@ -27,6 +27,10 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
 
   List<Customer> customersList = List();
 
+  List<String> _dropdownItems = ["Search By Name", "Search By Code"];
+
+  String _selectedSearch = 'Search By Name';
+
   String filter;
   TextEditingController controller = new TextEditingController();
   bool isLoading = true;
@@ -189,8 +193,9 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
         if (filter == null || filter == "") {
           return _buildRow(list[index], index);
         } else {
-          if (list[index].name.toLowerCase().contains(filter.toLowerCase()) ||
-              list[index].code.contains(filter)) {
+          if (_selectedSearch == "Search By Name" ? list[index].name
+              .toLowerCase().contains(filter.toLowerCase()) :
+          list[index].code == filter) {
             return _buildRow(list[index], index);
           } else {
             return new Container();
@@ -331,16 +336,40 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
                             ])
                           : Expanded(
                               child: Column(children: <Widget>[
-                              SizedBox(
-                                height: 50,
-                                child: Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 6, horizontal: 20),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.grey[200],
-                                    ),
-                                    child: TextField(
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  margin: EdgeInsets.only(right: 20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                      child: new DropdownButton<String>(
+                                        items: _dropdownItems.map((
+                                            String value) {
+                                          return new DropdownMenuItem<String>(
+                                            value: value,
+                                            child: new Text(value),
+                                          );
+                                        }).toList(),
+                                        value: _selectedSearch,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            _selectedSearch = newValue;
+                                          });
+                                        },
+                                      )
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                  child: Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 6, horizontal: 20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: Colors.grey[200],
+                                      ),
+                                      child: TextField(
                                       controller: controller,
                                       decoration: InputDecoration(
                                           border: InputBorder.none,

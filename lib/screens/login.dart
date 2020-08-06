@@ -65,11 +65,16 @@ class _LoginPageState extends State<LoginPage> {
             response) {
           print(response.body);
           if(response.statusCode == 200){
-            prefs.setBool('isLogged',true);
-            prefs.setString('token', json.decode(response.body)['token'] );
-            prefs.setString('name', json.decode(response.body)['agent']['name']);
-            prefs.setString('uuid', json.decode(response.body)['agent']['uuid'] );
-            prefs.setString('user_id', json.decode(response.body)['agent']['user_id'] );
+            prefs.setBool('isLogged', true);
+            prefs.setString('token', json.decode(response.body)['token']);
+            prefs.setString(
+                'name', json.decode(response.body)['agent']['name']);
+            prefs.setString(
+                'uuid', json.decode(response.body)['agent']['uuid']);
+            prefs.setString(
+                'phone', json.decode(response.body)['agent']['phone']);
+            prefs.setString(
+                'user_id', json.decode(response.body)['agent']['user_id']);
             isLogin = true;
           }else{
             _scaffoldKey.currentState.showSnackBar(SnackBar(
