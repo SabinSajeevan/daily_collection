@@ -738,26 +738,23 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Container(
-                                      margin:
-                                      EdgeInsets.symmetric(horizontal: 20),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(8),
-                                          color: Colors.grey[200]),
-                                      padding: EdgeInsets.only(
-                                          top: 5, bottom: 5, left: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                        children: <Widget>[
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text("AMOUNT*"),
-                                          Row(
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: TextField(
+                                      margin: EdgeInsets.only(
+                                                left: 20, right: 10),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                color: Colors.grey[200]),
+                                            padding: EdgeInsets.only(
+                                                top: 2, bottom: 3, left: 10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text("AMOUNT*"),
+                                                TextField(
                                                   controller: amountController,
                                                   onTap: () {
                                                     setState(() {
@@ -767,7 +764,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                                                   decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     focusedBorder:
-                                                    InputBorder.none,
+                                                        InputBorder.none,
                                                     enabledBorder:
                                                     InputBorder.none,
                                                     errorBorder:
@@ -784,9 +781,6 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                                                         .digitsOnly
                                                   ],
                                                 ),
-                                              ),
-                                            ],
-                                          )
                                         ],
                                       ),
                                     ),
@@ -808,7 +802,7 @@ class _AddCollectionPageState extends State<AddCollectionPage> {
                                         },
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
-                                              vertical: 20, horizontal: 40),
+                                              vertical: 17, horizontal: 40),
                                           child: Text("SAVE", style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w500,

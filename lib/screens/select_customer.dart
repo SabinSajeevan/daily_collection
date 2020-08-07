@@ -371,6 +371,10 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
                                       ),
                                       child: TextField(
                                       controller: controller,
+                                      keyboardType:
+                                          _selectedSearch == "Search By Name"
+                                              ? TextInputType.text
+                                              : TextInputType.number,
                                       decoration: InputDecoration(
                                           border: InputBorder.none,
                                           contentPadding: EdgeInsets.symmetric(

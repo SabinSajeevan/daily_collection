@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
           return SizedBox(
             height: 50,
             child: Container(
-                margin: EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+                margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: Colors.grey[200],
@@ -117,14 +117,14 @@ class _HomePageState extends State<HomePage> {
       },
       separatorBuilder: (context,index){
         if (filter == null || filter == "") {
-          return Divider();
+          return Divider(height: 1,);
         } else {
           if (list[index].customer_name
               .toLowerCase()
               .contains(filter.toLowerCase())) {
             return Divider();
           } else {
-            return new Container();
+            return new Container(height: 1,);
           }
         }
       },
@@ -132,17 +132,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildRow(Collection c,index) {
-    return new ListTile(
-      title: Text(
-        toBeginningOfSentenceCase(c.customer_name),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Text(
-            "${c.amount}.00",
-            style: TextStyle(color: Theme
-                .of(context)
+    return new Material(
+        color: Colors.transparent,
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          title: Text(
+            toBeginningOfSentenceCase(c.customer_name),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                "${c.amount}.00",
+                style: TextStyle(color: Theme
+                    .of(context)
                 .accentColor, fontWeight: FontWeight.w500),
           ),
           Text(
@@ -175,6 +178,7 @@ class _HomePageState extends State<HomePage> {
                       color: Color(colorsList[index > 3 ? index % 4 : index]),
                     )));
       },
+        )
     );
   }
 
@@ -327,15 +331,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.topRight,
-                    margin: EdgeInsets.only(top: 155, right: 90),
-                    child: Text(' 2.7.1 © TechnoSoft', style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                      textAlign: TextAlign.end,),
-                  ),
-                  Container(
                       margin: EdgeInsets.only(top: 180),
                       decoration: BoxDecoration(
                           borderRadius:
@@ -457,7 +452,43 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             )
-        ) // This trailing comma makes auto-formatting nicer for build methods.
+        ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme
+                    .of(context)
+                    .primaryColor,
+                Theme
+                    .of(context)
+                    .primaryColorDark
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey[300],
+                  offset: Offset(1, 1)
+              ),
+            ]
+        ),
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text('TechnoSoft', style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w500),
+            ),
+            Text('Version 2.7.1', style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

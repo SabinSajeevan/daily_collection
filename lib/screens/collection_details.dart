@@ -196,16 +196,26 @@ class _CollectionDetailsPageState extends State<CollectionDetailsPage> {
                                           ),
                                           ListTile(
                                             title: Text("Collection Type"),
-                                            subtitle: Text(widget.collection.collection_type_name),
+                                            subtitle: Text(widget.collection
+                                                .collection_type_name),
                                           ),
-                                          widget.collection.sub_type == null ? Container() :
+                                          widget.collection.sub_type == null
+                                              ? Container()
+                                              : ListTile(
+                                                  title: Text(
+                                                      "Collection Sub Type"),
+                                                  subtitle: Text(widget
+                                                      .collection.sub_type),
+                                                ),
                                           ListTile(
-                                            title: Text("Collection Sub Type"),
-                                            subtitle: Text(widget.collection.sub_type),
+                                            title: Text("Collection Number"),
+                                            subtitle: Text(widget
+                                                .collection.collection_number),
                                           ),
                                           ListTile(
                                             title: Text("Created On"),
-                                            subtitle: Text(widget.collection.created_at),
+                                            subtitle: Text(
+                                                widget.collection.created_at),
                                           )
                                         ],
                                       )))),
