@@ -100,16 +100,22 @@ class _LoginPageState extends State<LoginPage> {
     return isLogin;
   }
 
+  String validate(String value) {
+    if (value.length == 0)
+      return 'Field can\'t be empty!';
+    else
+      return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
                   SizedBox(height: 50.0,),
                   Padding(padding: EdgeInsets.only(left: 20),
                   child: Column(
@@ -151,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                           onFieldSubmitted: (term) {
                             FocusScope.of(context).nextFocus();
                           },
+                          validator: validate,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
@@ -180,14 +187,15 @@ class _LoginPageState extends State<LoginPage> {
                           children: <Widget>[
                             Expanded(
                               child: TextFormField(
+                                validator: validate,
                                 obscureText: !isPasswordVisible,
                                 decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    hintText: "Enter Password",
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  hintText: "Enter Password",
                                 ),
                                 textInputAction: TextInputAction.done,
                                 controller: _passwordController,
